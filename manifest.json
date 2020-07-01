@@ -1,15 +1,21 @@
 {
-  "name": "Injecta",
+  "name": "Revyou",
   "version": "0.0.1",
   "manifest_version": 2,
-  "description": "Injecting stuff",
-  "homepage_url": "http://danharper.me",
+  "description": "Revyou Maaaadness",
   "background": {
     "scripts": ["background.js"],
     "persistent": true
   },
+  "content_scripts": [
+    {
+      "js": ["inject.js"],
+      "css": ["style.css"],
+      "matches": ["https://*/*", "http://*/*"]
+    }
+  ],
   "browser_action": {
-    "default_title": "Inject!"
+    "default_title": "Revyou"
   },
   "permissions": ["https://*/*", "http://*/*", "tabs"]
 }
