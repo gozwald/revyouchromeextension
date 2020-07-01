@@ -25,9 +25,9 @@
   };
 
   const handleEvent = (e) => {
-    const modalBody = document.querySelector("#myModal > div > div.modal-body");
+    const modalBody = document.querySelector(".modal-body");
 
-    modalBody.innerHTML += ` <div id="nested">${e.target.name}</div>`;
+    modalBody.innerHTML += ` <div id="nested"><h2>Loading...</h2></div>`;
 
     const modal = document.getElementById("myModal");
     const span = document.querySelector(
