@@ -9,9 +9,9 @@
   },
   "content_scripts": [
     {
-      "js": ["inject.js", "materialize.js"],
+      "js": ["inject.js", "materialize.js", "d3.v4.js", "d3.layout.cloud.js"],
       "css": ["materialize.css", "style.css"],
-      "matches": ["https://*/*", "http://*/*"]
+      "matches": ["https://www.amazon.com/*", "http://www.amazon.com/*"]
     }
   ],
   "browser_action": {

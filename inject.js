@@ -27,8 +27,134 @@
       "#myModal > div > div.modal-header > span"
     );
     modal.style.display = "block";
-    modalBody.innerHTML += `<div id="loading"><div class="loader"></div>`;
+    // modalBody.innerHTML += `<div id="loading"><div class="loader"></div></div>`;
+    modalBody.innerHTML += `<div id="loading"><div id="cloud"></div></div>`;
     const loading = document.getElementById("loading");
+
+    var myWords = [
+      "Hello",
+      "Everybody",
+      "How",
+      "Are",
+      "You",
+      "Today",
+      "It",
+      "Is",
+      "A",
+      "Lovely",
+      "Day",
+      "I",
+      "Love",
+      "Coding",
+      "In",
+      "My",
+      "Van",
+      "Mate",
+      "Peace",
+      "Love",
+      "Keep",
+      "The",
+      "Good",
+      "Work",
+      "Make",
+      "Love",
+      "Not",
+      "War",
+      "Surfing",
+      "R",
+      "R",
+      "Data-Viz",
+      "Python",
+      "Linux",
+      "Programming",
+      "Graph Gallery",
+      "Biologie",
+      "Resistance",
+      "Computing",
+      "Data-Science",
+      "Reproductible",
+      "GitHub",
+      "Script",
+      "Experimentation",
+      "Talk",
+      "Conference",
+      "Writing",
+      "Publication",
+      "Analysis",
+      "Bioinformatics",
+      "Science",
+      "Statistics",
+      "Data",
+      "Programming",
+      "Wheat",
+      "Virus",
+      "Genotyping",
+      "Work",
+      "Fun",
+      "Surfing",
+      "R",
+      "R",
+      "Data-Viz",
+      "Python",
+      "Linux",
+      "Programming",
+    ];
+
+    // set the dimensions and margins of the graph
+    var margin = { top: 0, right: 0, bottom: 0, left: 0 },
+      width = 450 - margin.left - margin.right,
+      height = 450 - margin.top - margin.bottom;
+
+    // append the svg object to the body of the page
+    var svg = d3
+      .select("#cloud")
+      .append("svg")
+      .attr("width", width + margin.left + margin.right)
+      .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+      .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+    // Constructs a new cloud layout instance. It run an algorithm to find the position of words that suits your requirements
+    var layout = d3.layout
+      .cloud()
+      .size([width, height])
+      .words(
+        myWords.map((d) => {
+          return { text: d };
+        })
+      )
+      .spiral("archimedean")
+      .rotate(0)
+      .padding(6)
+      .fontSize(() => 10 + Math.random() * 22)
+      .on("end", draw);
+    layout.start();
+
+    // This function takes the output of 'layout' above and draw the words
+    // Better not to touch it. To change parameters, play with the 'layout' variable above
+    function draw(words) {
+      svg
+        .append("g")
+        .attr(
+          "transform",
+          "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")"
+        )
+        .selectAll("text")
+        .data(words)
+        .enter()
+        .append("text")
+        .style("font-size", function (d) {
+          console.log(d);
+          return d.size + "px";
+        })
+        .attr("text-anchor", "middle")
+        .attr("transform", function (d) {
+          return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+        })
+        .text(function (d) {
+          return d.text;
+        });
+    }
 
     span.onclick = () => {
       modal.style.display = "none";
@@ -53,11 +179,11 @@
       .then((data) => {
         modalBody.removeChild(loading);
 
-        modalBody.innerHTML += `<div id="count"></div>`;
-        const count = document.getElementById("count");
+        modalBody.innerHTML += `<div class="count"></div>`;
+        const count = document.querySelector(".count");
 
         for (const [key, value] of Object.entries(data.finalTally.count)) {
-          count.innerHTML += `<h2>${key}: ${value}</h2>`;
+          count.innerHTML += `<span class="waves-effect waves-light btn">${key} (${value})</span>`;
         }
 
         window.onclick = (event) => {

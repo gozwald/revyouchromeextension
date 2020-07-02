@@ -74,10 +74,13 @@
 
 .modal-body {
   display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
   height: 70vh;
+}
+
+.count span {
+  margin: 3px;
 }
 
 .modal-footer {
