@@ -9,8 +9,8 @@
   },
   "content_scripts": [
     {
-      "js": ["inject.js"],
-      "css": ["style.css"],
+      "js": ["inject.js", "materialize.js"],
+      "css": ["materialize.css", "style.css"],
       "matches": ["https://*/*", "http://*/*"]
     }
   ],
