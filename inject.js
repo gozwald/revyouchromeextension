@@ -20,28 +20,24 @@
     alert("Error: Document tree modified during iteration " + e);
   }
 
-  const buildCloud = (data) => {
-    console.log(data.finalTally.count);
-  };
-
   const handleEvent = (e) => {
     const modalBody = document.querySelector(".modal-body");
-
-    modalBody.innerHTML += ` <div id="nested"><h2>Loading...</h2></div>`;
-
     const modal = document.getElementById("myModal");
     const span = document.querySelector(
       "#myModal > div > div.modal-header > span"
     );
     modal.style.display = "block";
+    modalBody.innerHTML += `<div id="loading"><div class="loader"></div>`;
+    const loading = document.getElementById("loading");
+
     span.onclick = () => {
       modal.style.display = "none";
-      modalBody.removeChild(document.getElementById("nested"));
+      modalBody.removeChild(loading);
     };
     window.onclick = (event) => {
       if (event.target == modal) {
         modal.style.display = "none";
-        modalBody.removeChild(document.getElementById("nested"));
+        modalBody.removeChild(loading);
       }
     };
 
@@ -55,7 +51,21 @@
     })
       .then((response) => response.json())
       .then((data) => {
-        buildCloud(data);
+        modalBody.removeChild(loading);
+
+        modalBody.innerHTML += `<div id="count"></div>`;
+        const count = document.getElementById("count");
+
+        for (const [key, value] of Object.entries(data.finalTally.count)) {
+          count.innerHTML += `<h2>${key}: ${value}</h2>`;
+        }
+
+        window.onclick = (event) => {
+          if (event.target == modal) {
+            modal.style.display = "none";
+            modalBody.removeChild(count);
+          }
+        };
       })
       .catch((error) => {
         console.error("Error:", error);
