@@ -20,86 +20,7 @@
     alert("Error: Document tree modified during iteration " + e);
   }
 
-  const handleEvent = (e) => {
-    const modalBody = document.querySelector(".modal-body");
-    const modal = document.getElementById("myModal");
-    const span = document.querySelector(
-      "#myModal > div > div.modal-header > span"
-    );
-    modal.style.display = "block";
-    // modalBody.innerHTML += `<div id="loading"><div class="loader"></div></div>`;
-    modalBody.innerHTML += `<div id="loading"><div id="cloud"></div></div>`;
-    const loading = document.getElementById("loading");
-
-    var myWords = [
-      "Hello",
-      "Everybody",
-      "How",
-      "Are",
-      "You",
-      "Today",
-      "It",
-      "Is",
-      "A",
-      "Lovely",
-      "Day",
-      "I",
-      "Love",
-      "Coding",
-      "In",
-      "My",
-      "Van",
-      "Mate",
-      "Peace",
-      "Love",
-      "Keep",
-      "The",
-      "Good",
-      "Work",
-      "Make",
-      "Love",
-      "Not",
-      "War",
-      "Surfing",
-      "R",
-      "R",
-      "Data-Viz",
-      "Python",
-      "Linux",
-      "Programming",
-      "Graph Gallery",
-      "Biologie",
-      "Resistance",
-      "Computing",
-      "Data-Science",
-      "Reproductible",
-      "GitHub",
-      "Script",
-      "Experimentation",
-      "Talk",
-      "Conference",
-      "Writing",
-      "Publication",
-      "Analysis",
-      "Bioinformatics",
-      "Science",
-      "Statistics",
-      "Data",
-      "Programming",
-      "Wheat",
-      "Virus",
-      "Genotyping",
-      "Work",
-      "Fun",
-      "Surfing",
-      "R",
-      "R",
-      "Data-Viz",
-      "Python",
-      "Linux",
-      "Programming",
-    ];
-
+  const cloudGenerator = (divName, array) => {
     // set the dimensions and margins of the graph
     var margin = { top: 0, right: 0, bottom: 0, left: 0 },
       width = 450 - margin.left - margin.right,
@@ -107,7 +28,7 @@
 
     // append the svg object to the body of the page
     var svg = d3
-      .select("#cloud")
+      .select(divName)
       .append("svg")
       .attr("width", width + margin.left + margin.right)
       .attr("height", height + margin.top + margin.bottom)
@@ -119,7 +40,7 @@
       .cloud()
       .size([width, height])
       .words(
-        myWords.map((d) => {
+        array.map((d) => {
           return { text: d };
         })
       )
@@ -144,7 +65,6 @@
         .enter()
         .append("text")
         .style("font-size", function (d) {
-          console.log(d);
           return d.size + "px";
         })
         .attr("text-anchor", "middle")
@@ -155,6 +75,17 @@
           return d.text;
         });
     }
+  };
+
+  const handleEvent = (e) => {
+    const modalBody = document.querySelector(".modal-body");
+    const modal = document.getElementById("myModal");
+    const span = document.querySelector(
+      "#myModal > div > div.modal-header > span"
+    );
+    modal.style.display = "block";
+    modalBody.innerHTML += `<div id="loading"><div class="loader"></div></div>`;
+    const loading = document.getElementById("loading");
 
     span.onclick = () => {
       modal.style.display = "none";
@@ -177,13 +108,24 @@
     })
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         modalBody.removeChild(loading);
 
         modalBody.innerHTML += `<div class="count"></div>`;
         const count = document.querySelector(".count");
 
+        const snippetData = (data) => {
+          for (const [_key, value] of Object.entries(
+            data.snippetCollection.snippetCollection
+          )) {
+            return value;
+          }
+        };
+
         for (const [key, value] of Object.entries(data.finalTally.count)) {
           count.innerHTML += `<span class="waves-effect waves-light btn">${key} (${value})</span>`;
+          count.innerHTML += `<div id="cloud${key}"></div>`;
+          cloudGenerator(`#cloud${key}`, snippetData(data));
         }
 
         window.onclick = (event) => {
