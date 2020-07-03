@@ -80,17 +80,11 @@
   const handleEvent = (e) => {
     const modalBody = document.querySelector(".modal-body");
     const modal = document.getElementById("myModal");
-    const span = document.querySelector(
-      "#myModal > div > div.modal-header > span"
-    );
+
     modal.style.display = "block";
     modalBody.innerHTML += `<div id="loading"><div class="loader"></div></div>`;
     const loading = document.getElementById("loading");
 
-    span.onclick = () => {
-      modal.style.display = "none";
-      modalBody.removeChild(loading);
-    };
     window.onclick = (event) => {
       if (event.target == modal) {
         modal.style.display = "none";
@@ -111,21 +105,42 @@
         console.log(data);
         modalBody.removeChild(loading);
 
-        modalBody.innerHTML += `<div class="count"></div>`;
+        modalBody.innerHTML += `<div class="count"><div class="uppermodalbody"></div><div class="lowermodalbody"></div></div>`;
         const count = document.querySelector(".count");
+        const uppermodal = document.querySelector(".uppermodalbody");
+        const lowermodal = document.querySelector(".lowermodalbody");
 
-        const snippetData = (data) => {
-          for (const [_key, value] of Object.entries(
-            data.snippetCollection.snippetCollection
-          )) {
-            return value;
+        const handleCloud = (e, key) => {
+          const tabcontent = document.getElementsByClassName(
+            document.querySelectorAll("span[id^='labelbutton']")
+          );
+          for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].id.style.display = "none";
           }
+
+          console.log(key);
+          console.log(e.target);
+          console.log(document.querySelectorAll("span[id^='labelbutton']"));
+          // document.querySelector(`#cloud${key}`).style.display = "block";
         };
 
+        let keys = [];
         for (const [key, value] of Object.entries(data.finalTally.count)) {
-          count.innerHTML += `<span class="waves-effect waves-light btn">${key} (${value})</span>`;
-          count.innerHTML += `<div id="cloud${key}"></div>`;
-          cloudGenerator(`#cloud${key}`, snippetData(data));
+          lowermodal.innerHTML += `<span id="labelbutton${key}" class="waves-effect waves-light btn">${key} (${value})</span>`;
+          keys.push(key);
+        }
+
+        keys.forEach((key) => {
+          const targetButton = document.querySelector(`#labelbutton${key}`);
+          targetButton.addEventListener("click", (e) => handleCloud(e, key));
+        });
+
+        for (const [key, value] of Object.entries(
+          data.snippetCollection.snippetCollection
+        )) {
+          uppermodal.innerHTML += `<div id="cloud${key}"></div>`;
+          document.querySelector(`#cloud${key}`).style.display = "none";
+          cloudGenerator(`#cloud${key}`, value);
         }
 
         window.onclick = (event) => {
@@ -154,7 +169,7 @@
   <!-- Modal content -->
   <div class="modal-content">
     <div class="modal-header">
-      <span class="close">&times;</span>
+    
 
     </div>
     <div class="modal-body">
