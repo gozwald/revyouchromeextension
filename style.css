@@ -79,6 +79,9 @@
   height: 70vh;
 }
 .uppermodalbody {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: 1px solid #f0f;
   height: 80%;
   width: 100%;

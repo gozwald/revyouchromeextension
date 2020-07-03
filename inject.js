@@ -23,8 +23,10 @@
   const cloudGenerator = (divName, array) => {
     // set the dimensions and margins of the graph
     var margin = { top: 0, right: 0, bottom: 0, left: 0 },
-      width = 450 - margin.left - margin.right,
-      height = 450 - margin.top - margin.bottom;
+      width = 650 - margin.left - margin.right,
+      height = 400 - margin.top - margin.bottom;
+
+    var fill = d3.scaleOrdinal(d3.schemeCategory20);
 
     // append the svg object to the body of the page
     var svg = d3
@@ -46,7 +48,7 @@
       )
       .spiral("archimedean")
       .rotate(0)
-      .padding(6)
+      .padding(8)
       .fontSize(() => 10 + Math.random() * 22)
       .on("end", draw);
     layout.start();
@@ -67,6 +69,7 @@
         .style("font-size", function (d) {
           return d.size + "px";
         })
+        .style("fill", (d, i) => fill(i))
         .attr("text-anchor", "middle")
         .attr("transform", function (d) {
           return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
@@ -110,21 +113,15 @@
         const uppermodal = document.querySelector(".uppermodalbody");
         const lowermodal = document.querySelector(".lowermodalbody");
 
-        const handleCloud = (e, key) => {
-          const tabcontent = document.getElementsByClassName(
-            document.querySelectorAll("span[id^='labelbutton']")
-          );
-          for (i = 0; i < tabcontent.length; i++) {
-            tabcontent[i].id.style.display = "none";
-          }
+        let keys = [];
 
-          console.log(key);
-          console.log(e.target);
-          console.log(document.querySelectorAll("span[id^='labelbutton']"));
-          // document.querySelector(`#cloud${key}`).style.display = "block";
+        const handleCloud = (currentKey) => {
+          keys.forEach((key) => {
+            document.querySelector(`#cloud${key}`).style.display =
+              currentKey === key ? "block" : "none";
+          });
         };
 
-        let keys = [];
         for (const [key, value] of Object.entries(data.finalTally.count)) {
           lowermodal.innerHTML += `<span id="labelbutton${key}" class="waves-effect waves-light btn">${key} (${value})</span>`;
           keys.push(key);
@@ -132,7 +129,7 @@
 
         keys.forEach((key) => {
           const targetButton = document.querySelector(`#labelbutton${key}`);
-          targetButton.addEventListener("click", (e) => handleCloud(e, key));
+          targetButton.addEventListener("click", () => handleCloud(key));
         });
 
         for (const [key, value] of Object.entries(
