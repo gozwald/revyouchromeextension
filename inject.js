@@ -81,6 +81,8 @@
   };
 
   const handleEvent = (e) => {
+    const controller = new AbortController();
+    const signal = controller.signal;
     const modalBody = document.querySelector(".modal-body");
     const modal = document.getElementById("myModal");
 
@@ -92,11 +94,13 @@
       if (event.target == modal) {
         modal.style.display = "none";
         modalBody.removeChild(loading);
+        controller.abort();
       }
     };
 
     fetch("http://localhost:3000/getdata", {
       method: "POST",
+      signal: signal,
       headers: {
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",

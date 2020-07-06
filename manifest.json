@@ -17,5 +17,5 @@
   "browser_action": {
     "default_title": "Revyou"
   },
-  "permissions": ["https://*/*", "http://*/*", "tabs"]
+  "permissions": ["https://*/*", "http://*/*", "tabs", "storage"]
 }
