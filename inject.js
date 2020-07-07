@@ -43,7 +43,7 @@
       .size([width, height])
       .words(
         array.map((d) => {
-          return { text: d };
+          return { text: d[0], review: d[1] };
         })
       )
       .spiral("archimedean")
@@ -66,6 +66,20 @@
         .data(words)
         .enter()
         .append("text")
+        // .on("click", function (d) {
+        //   console.log(document.querySelector("#review"));
+        //   if (document.querySelector("#review")) {
+        //     document
+        //       .querySelector(".uppermodalbody")
+        //       .removeChild(document.querySelector("#review"));
+        //   }
+        //   document.querySelector(
+        //     ".uppermodalbody"
+        //   ).innerHTML += `<div id="review">${d.review}</div>`;
+        // })
+        .on("click", function (d) {
+          console.log(d.review);
+        })
         .style("font-size", function (d) {
           return d.size + "px";
         })
@@ -159,11 +173,27 @@
   for (let i = 0; i < targetNode.length; i++) {
     let block = document.createElement("span");
 
+    let image =
+      targetNode[i].parentNode.parentNode.parentNode.parentNode.parentNode
+        .parentNode.parentNode.firstElementChild.firstElementChild
+        .firstElementChild.firstElementChild.firstElementChild.firstElementChild
+        .firstElementChild.src;
+
+    let title =
+      targetNode[i].parentNode.parentNode.parentNode.parentNode.parentNode
+        .parentNode.parentNode.firstElementChild.firstElementChild
+        .firstElementChild.firstElementChild.firstElementChild.firstElementChild
+        .firstElementChild.alt;
+
+    console.log(title);
+
     block.innerHTML += `
       <!-- Trigger/Open The Modal -->
 <button name=${targetNode[i]
       .querySelector("span:nth-child(2) > a")
-      .getAttribute("href")} id="myBtn${i}">Magic</button>
+      .getAttribute(
+        "href"
+      )} id="myBtn${i}" title="${title}" image="${image}">Magic</button>
       <!-- The Modal -->
 <div id="myModal" class="modal">
 
