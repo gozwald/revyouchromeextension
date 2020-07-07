@@ -68,7 +68,7 @@
 
 .modal-header {
   padding: 5px;
-  background-color: #09f;
+  background-color: rgb(0, 56, 94);
   color: white;
 }
 
@@ -82,17 +82,64 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  border: 1px solid #f0f;
-  height: 80%;
+  border: 1px solid rgb(0, 0, 0);
+  height: 25%;
   width: 100%;
 }
 
 .lowermodalbody {
   display: flex;
   justify-content: center;
-  border: 1px solid #f0f;
-  height: 20%;
+  border: 1px solid rgb(0, 0, 0);
+  height: 75%;
   width: 100%;
+}
+
+.lowerleft {
+  display: flex;
+  flex-direction: column;
+  align-content: center;
+  justify-content: center;
+  border: 1px solid rgb(0, 0, 0);
+  height: 100%;
+  width: 20%;
+}
+
+.lowerright {
+  display: flex;
+  /* background-image: url("chrome-extension://magglmnfpahaacfieggnekiajpmlggld/images/cloud.png");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  background-size: 100% 100%; */
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgb(0, 0, 0);
+  height: 100%;
+  width: 80%;
+}
+
+.upperleft {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgb(0, 0, 0);
+  height: 100%;
+  width: 20%;
+}
+
+.upperleft img {
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.upperright {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 1px solid rgb(0, 0, 0);
+  height: 100%;
+  width: 80%;
 }
 
 .lowermodalbody span {
@@ -112,7 +159,7 @@
 
 .modal-footer {
   padding: 5px;
-  background-color: #09f;
+  background-color: rgb(0, 56, 94);
   color: white;
 }
 

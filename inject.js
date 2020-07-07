@@ -24,7 +24,7 @@
     // set the dimensions and margins of the graph
     var margin = { top: 0, right: 0, bottom: 0, left: 0 },
       width = 650 - margin.left - margin.right,
-      height = 400 - margin.top - margin.bottom;
+      height = 300 - margin.top - margin.bottom;
 
     var fill = d3.scaleOrdinal(d3.schemeCategory20);
 
@@ -48,8 +48,8 @@
       )
       .spiral("archimedean")
       .rotate(0)
-      .padding(8)
-      .fontSize(() => 10 + Math.random() * 22)
+      .padding(12)
+      .fontSize(() => 13 + Math.random() * 22)
       .on("end", draw);
     layout.start();
 
@@ -66,20 +66,16 @@
         .data(words)
         .enter()
         .append("text")
-        // .on("click", function (d) {
-        //   console.log(document.querySelector("#review"));
-        //   if (document.querySelector("#review")) {
-        //     document
-        //       .querySelector(".uppermodalbody")
-        //       .removeChild(document.querySelector("#review"));
-        //   }
-        //   document.querySelector(
-        //     ".uppermodalbody"
-        //   ).innerHTML += `<div id="review">${d.review}</div>`;
-        // })
         .on("click", function (d) {
-          console.log(d.review);
+          console.debug({ d });
+          const reviewContainer = document.querySelector(".upperright");
+          if (reviewContainer) {
+            reviewContainer.innerHTML = d.review;
+          }
         })
+        // .on("click", function (d) {
+        //   console.log(d.review);
+        // })
         .style("font-size", function (d) {
           return d.size + "px";
         })
@@ -126,10 +122,21 @@
         console.log(data);
         modalBody.removeChild(loading);
 
-        modalBody.innerHTML += `<div class="count"><div class="uppermodalbody"></div><div class="lowermodalbody"></div></div>`;
+        modalBody.innerHTML += `<div class="count">
+        <div class="uppermodalbody"><div class="upperleft"></div><div class="upperright"></div></div>
+        <div class="lowermodalbody"><div class="lowerleft"></div><div class="lowerright"></div></div>
+        </div>`;
+
         const count = document.querySelector(".count");
         const uppermodal = document.querySelector(".uppermodalbody");
         const lowermodal = document.querySelector(".lowermodalbody");
+        const upperleft = document.querySelector(".upperleft");
+        const lowerleft = document.querySelector(".lowerleft");
+        const upperright = document.querySelector(".upperright");
+        const lowerright = document.querySelector(".lowerright");
+        const productImage = e.target.getAttribute("image");
+
+        upperleft.innerHTML += `<img src=${productImage}>`;
 
         let keys = [];
 
@@ -140,23 +147,43 @@
           });
         };
 
-        for (const [key, value] of Object.entries(data.finalTally.count)) {
-          lowermodal.innerHTML += `<span id="labelbutton${key}" class="waves-effect waves-light btn">${key} (${value})</span>`;
-          keys.push(key);
+        let sortable = [];
+        for (let count in data.finalTally.count) {
+          sortable.push([count, data.finalTally.count[count]]);
         }
+
+        sortable.sort(function (a, b) {
+          return a[1] - b[1];
+        });
+
+        let objSorted = {};
+        sortable.forEach(function (item) {
+          objSorted[item[0]] = item[1];
+        });
+
+        Object.entries(objSorted).forEach(([key, value], _index) => {
+          lowerleft.innerHTML += `<span id="labelbutton${key}" class="waves-effect waves-light btn">${key} (${value})</span>`;
+          keys.push(key);
+        });
 
         keys.forEach((key) => {
           const targetButton = document.querySelector(`#labelbutton${key}`);
           targetButton.addEventListener("click", () => handleCloud(key));
         });
 
-        for (const [key, value] of Object.entries(
-          data.snippetCollection.snippetCollection
-        )) {
-          uppermodal.innerHTML += `<div id="cloud${key}"></div>`;
-          document.querySelector(`#cloud${key}`).style.display = "none";
-          cloudGenerator(`#cloud${key}`, value);
-        }
+        Object.entries(data.snippetCollection.snippetCollection).forEach(
+          ([key, value], index, array) => {
+            console.log({ index: index });
+            console.log({ arraylength: array.length });
+            lowerright.innerHTML += `<div id="cloud${key}"></div>`;
+            cloudGenerator(`#cloud${key}`, value);
+            document.querySelector(`#cloud${key}`).style.display = "none";
+
+            if (index === array.length - 1) {
+              document.querySelector(`#cloud${key}`).style.display = "block";
+            }
+          }
+        );
 
         window.onclick = (event) => {
           if (event.target == modal) {
