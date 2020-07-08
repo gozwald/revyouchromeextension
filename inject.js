@@ -49,7 +49,7 @@
       .spiral("archimedean")
       .rotate(0)
       .padding(12)
-      .fontSize(() => 13 + Math.random() * 22)
+      .fontSize(() => 10 + Math.random() * 22)
       .on("end", draw);
     layout.start();
 
@@ -66,16 +66,7 @@
         .data(words)
         .enter()
         .append("text")
-        .on("click", function (d) {
-          console.debug({ d });
-          const reviewContainer = document.querySelector(".upperright");
-          if (reviewContainer) {
-            reviewContainer.innerHTML = d.review;
-          }
-        })
-        // .on("click", function (d) {
-        //   console.log(d.review);
-        // })
+
         .style("font-size", function (d) {
           return d.size + "px";
         })
@@ -86,6 +77,13 @@
         })
         .text(function (d) {
           return d.text;
+        })
+        .on("click", function (d) {
+          console.log({ d });
+          const reviewContainer = document.querySelector("#fullreview");
+          if (reviewContainer) {
+            reviewContainer.innerHTML = `"${d.review}"`;
+          }
         });
     }
   };
@@ -98,12 +96,13 @@
 
     modal.style.display = "block";
     modalBody.innerHTML += `<div id="loading"><div class="loader"></div></div>`;
+    modalBody.innerHTML += `<img src="chrome-extension://magglmnfpahaacfieggnekiajpmlggld/images/revyou_2.png">`;
     const loading = document.getElementById("loading");
 
     window.onclick = (event) => {
       if (event.target == modal) {
         modal.style.display = "none";
-        modalBody.removeChild(loading);
+        modalBody.innerHTML = "";
         controller.abort();
       }
     };
@@ -120,11 +119,10 @@
       .then((response) => response.json())
       .then((data) => {
         console.log(data);
-        modalBody.removeChild(loading);
-
-        modalBody.innerHTML += `<div class="count">
-        <div class="uppermodalbody"><div class="upperleft"></div><div class="upperright"></div></div>
-        <div class="lowermodalbody"><div class="lowerleft"></div><div class="lowerright"></div></div>
+        modalBody.innerHTML = `<div class="count">
+        <div class="uppermodalbody"><div class="upperleft"></div><div class="upperright"><div id="fullreview" class="card"></div></div></div>
+        <div class="lowermodalbody"><div class="lowerleft"><div id="labelspositive"></div><div id="labelsnegative">
+        </div></div><div class="lowerright"><div id="cloudcontainer" class="card"></div></div></div>
         </div>`;
 
         const count = document.querySelector(".count");
@@ -134,9 +132,13 @@
         const lowerleft = document.querySelector(".lowerleft");
         const upperright = document.querySelector(".upperright");
         const lowerright = document.querySelector(".lowerright");
+        const cloudcontainer = document.querySelector("#cloudcontainer");
+        const fullreview = document.querySelector("#fullreview");
+        const labelspositive = document.querySelector("#labelspositive");
+        const labelsnegative = document.querySelector("#labelsnegative");
         const productImage = e.target.getAttribute("image");
 
-        upperleft.innerHTML += `<img src=${productImage}>`;
+        // upperleft.innerHTML += `<img src=${productImage}>`;
 
         let keys = [];
 
@@ -147,24 +149,45 @@
           });
         };
 
-        let sortable = [];
-        for (let count in data.finalTally.count) {
-          sortable.push([count, data.finalTally.count[count]]);
-        }
+        // const objectsortHelper = (obj) => {
+        //   let sortable = [];
+        //   for (let count in data.finalTally.count) {
+        //     sortable.push([count, data.finalTally.count[count]]);
+        //   }
 
-        sortable.sort(function (a, b) {
-          return a[1] - b[1];
-        });
+        //   sortable.sort(function (a, b) {
+        //     return a[1] - b[1];
+        //   });
 
-        let objSorted = {};
-        sortable.forEach(function (item) {
-          objSorted[item[0]] = item[1];
-        });
+        //   let objSorted = {};
+        //   sortable.forEach(function (item) {
+        //     objSorted[item[0]] = item[1];
 
-        Object.entries(objSorted).forEach(([key, value], _index) => {
-          lowerleft.innerHTML += `<span id="labelbutton${key}" class="waves-effect waves-light btn">${key} (${value})</span>`;
-          keys.push(key);
-        });
+        //     return objSorted;
+        //   });
+        // };
+
+        Object.entries(data.finalTally.count).forEach(
+          ([key, value], _index) => {
+            if (key === "good_feature") {
+              labelspositive.innerHTML += `<span id="labelbutton${key}" class="lime lighten-4 blue-text text-darken-2 btn">Good Feature (${value})</span>`;
+              keys.push(key);
+            }
+            if (key === "worked_as_intended") {
+              labelspositive.innerHTML += `<span id="labelbutton${key}" class="lime lighten-4 blue-text text-darken-2 btn">Worked as Intended (${value})</span>`;
+              keys.push(key);
+            }
+          }
+        );
+
+        Object.entries(data.finalTally.count).forEach(
+          ([key, value], _index) => {
+            if (key === "faulty_device") {
+              labelsnegative.innerHTML += `<span id="labelbutton${key}" class="red lighten-4 indigo-text text-darken-4 btn">Faulty Device (${value})</span>`;
+              keys.push(key);
+            }
+          }
+        );
 
         keys.forEach((key) => {
           const targetButton = document.querySelector(`#labelbutton${key}`);
@@ -173,9 +196,7 @@
 
         Object.entries(data.snippetCollection.snippetCollection).forEach(
           ([key, value], index, array) => {
-            console.log({ index: index });
-            console.log({ arraylength: array.length });
-            lowerright.innerHTML += `<div id="cloud${key}"></div>`;
+            cloudcontainer.innerHTML += `<div id="cloud${key}"></div>`;
             cloudGenerator(`#cloud${key}`, value);
             document.querySelector(`#cloud${key}`).style.display = "none";
 
@@ -188,7 +209,7 @@
         window.onclick = (event) => {
           if (event.target == modal) {
             modal.style.display = "none";
-            modalBody.removeChild(count);
+            modalBody.innerHTML = "";
           }
         };
       })

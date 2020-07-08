@@ -14,7 +14,7 @@
       "matches": ["https://www.amazon.com/*", "http://www.amazon.com/*"]
     }
   ],
-  "web_accessible_resources": ["images/*.png"],
+  "web_accessible_resources": ["images/*.png", "fonts/*.*"],
   "browser_action": {
     "default_title": "Revyou"
   },
