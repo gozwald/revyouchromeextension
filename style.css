@@ -93,6 +93,17 @@
   align-items: center;
   height: 70vh;
 }
+
+.modal-body img {
+  display: flex;
+  height: 20%;
+}
+
+.modal-body .progress {
+  display: flex;
+  width: 25%;
+}
+
 .uppermodalbody {
   display: flex;
   justify-content: center;

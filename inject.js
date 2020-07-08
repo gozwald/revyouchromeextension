@@ -95,8 +95,9 @@
     const modal = document.getElementById("myModal");
 
     modal.style.display = "block";
-    modalBody.innerHTML += `<div id="loading"><div class="loader"></div></div>`;
+    // modalBody.innerHTML += `<div id="loading"><div class="loader"></div></div>`;
     modalBody.innerHTML += `<img src="chrome-extension://magglmnfpahaacfieggnekiajpmlggld/images/revyou_2.png">`;
+    modalBody.innerHTML += `<div class="progress"><div class="indeterminate"></div></div>`;
     const loading = document.getElementById("loading");
 
     window.onclick = (event) => {
@@ -107,7 +108,7 @@
       }
     };
 
-    fetch("http://localhost:3000/getdata", {
+    fetch("https://revyoubackend.herokuapp.com/getdata/", {
       method: "POST",
       signal: signal,
       headers: {
