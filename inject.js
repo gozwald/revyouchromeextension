@@ -23,8 +23,14 @@
   const cloudGenerator = (divName, array) => {
     // set the dimensions and margins of the graph
     var margin = { top: 0, right: 0, bottom: 0, left: 0 },
-      width = 650 - margin.left - margin.right,
-      height = 300 - margin.top - margin.bottom;
+      width = 750 - margin.left - margin.right,
+      height = 350 - margin.top - margin.bottom;
+
+    // var color = d3.scale
+    //   .ordinal()
+    //   .range(["#66c2a5", "#fc8d62", "#8da0cb", "#e78ac3", "#a6d854"]);
+
+    // var fontSize = d3.scale.pow().exponent(5).domain([0, 1]).range([10, 80]);
 
     var fill = d3.scaleOrdinal(d3.schemeCategory20);
 
@@ -48,9 +54,10 @@
       )
       .spiral("archimedean")
       .rotate(0)
-      .padding(12)
-      .fontSize(() => 10 + Math.random() * 22)
+      .padding(10)
+      .fontSize(() => 17 + Math.random() * 20)
       .on("end", draw);
+
     layout.start();
 
     // This function takes the output of 'layout' above and draw the words
@@ -70,6 +77,7 @@
         .style("font-size", function (d) {
           return d.size + "px";
         })
+        .style("cursor", "pointer")
         .style("fill", (d, i) => fill(i))
         .attr("text-anchor", "middle")
         .attr("transform", function (d) {
@@ -78,10 +86,12 @@
         .text(function (d) {
           return d.text;
         })
-        .on("click", function (d) {
+        .on("click", (d) => {
           console.log({ d });
           const reviewContainer = document.querySelector("#fullreview");
+          console.log({ reviewContainer });
           if (reviewContainer) {
+            reviewContainer.style.fontFamily = "Montserrat, sans-serif";
             reviewContainer.innerHTML = `"${d.review}"`;
           }
         });
@@ -108,7 +118,7 @@
       }
     };
 
-    fetch("https://revyoubackend.herokuapp.com/getdata/", {
+    fetch("http://localhost:3000/getdata/", {
       method: "POST",
       signal: signal,
       headers: {
@@ -121,7 +131,9 @@
       .then((data) => {
         console.log(data);
         modalBody.innerHTML = `<div class="count">
-        <div class="uppermodalbody"><div class="upperleft"></div><div class="upperright"><div id="fullreview" class="card"></div></div></div>
+        <div class="uppermodalbody"><div class="upperleft"></div><div class="upperright"><div id="fullreview" class="card">
+        <img src="chrome-extension://magglmnfpahaacfieggnekiajpmlggld/images/downleft.png">Click on a text snippet below for the full review
+        <img src="chrome-extension://magglmnfpahaacfieggnekiajpmlggld/images/downright.png"></div></div></div>
         <div class="lowermodalbody"><div class="lowerleft"><div id="labelspositive"></div><div id="labelsnegative">
         </div></div><div class="lowerright"><div id="cloudcontainer" class="card"></div></div></div>
         </div>`;
@@ -170,12 +182,24 @@
 
         Object.entries(data.finalTally.count).forEach(
           ([key, value], _index) => {
-            if (key === "good_feature") {
-              labelspositive.innerHTML += `<span id="labelbutton${key}" class="lime lighten-4 blue-text text-darken-2 btn">Good Feature (${value})</span>`;
+            // if (key === "good_feature") {
+            //   labelspositive.innerHTML += `<span id="labelbutton${key}" class="lime lighten-4 blue-text text-darken-2 btn">Good Feature (${value})</span>`;
+            //   keys.push(key);
+            // }
+            // if (key === "worked_as_intended") {
+            //   labelspositive.innerHTML += `<span id="labelbutton${key}" class="lime lighten-4 blue-text text-darken-2 btn">Worked as Intended (${value})</span>`;
+            //   keys.push(key);
+            // }
+            if (key === "good_features") {
+              labelspositive.innerHTML += `<span id="labelbutton${key}" class="positivebutt">Good Features (${value})</span>`;
               keys.push(key);
             }
-            if (key === "worked_as_intended") {
-              labelspositive.innerHTML += `<span id="labelbutton${key}" class="lime lighten-4 blue-text text-darken-2 btn">Worked as Intended (${value})</span>`;
+            if (key === "good_quality_performance") {
+              labelspositive.innerHTML += `<span id="labelbutton${key}" class="positivebutt">Good Quality / Performance (${value})</span>`;
+              keys.push(key);
+            }
+            if (key === "good_usability") {
+              labelspositive.innerHTML += `<span id="labelbutton${key}" class="positivebutt">Good Usability (${value})</span>`;
               keys.push(key);
             }
           }
@@ -183,8 +207,20 @@
 
         Object.entries(data.finalTally.count).forEach(
           ([key, value], _index) => {
-            if (key === "faulty_device") {
-              labelsnegative.innerHTML += `<span id="labelbutton${key}" class="red lighten-4 indigo-text text-darken-4 btn">Faulty Device (${value})</span>`;
+            // if (key === "faulty_device") {
+            //   labelsnegative.innerHTML += `<span id="labelbutton${key}" class="red lighten-4 indigo-text text-darken-4 btn">Faulty Device (${value})</span>`;
+            //   keys.push(key);
+            // }
+            if (key === "lack_of_features") {
+              labelsnegative.innerHTML += `<span id="labelbutton${key}" class="negativebutt">Lack of Features (${value})</span>`;
+              keys.push(key);
+            }
+            if (key === "low_build_quality_performance") {
+              labelsnegative.innerHTML += `<span id="labelbutton${key}" class="negativebutt">Low Quality / Performance (${value})</span>`;
+              keys.push(key);
+            }
+            if (key === "poor_usability") {
+              labelsnegative.innerHTML += `<span id="labelbutton${key}" class="negativebutt">Poor Usability (${value})</span>`;
               keys.push(key);
             }
           }
@@ -198,10 +234,14 @@
         Object.entries(data.snippetCollection.snippetCollection).forEach(
           ([key, value], index, array) => {
             cloudcontainer.innerHTML += `<div id="cloud${key}"></div>`;
-            cloudGenerator(`#cloud${key}`, value);
+            console.log(`#cloud${key}`);
+            console.log({ value });
+            setTimeout(() => {
+              cloudGenerator(`#cloud${key}`, value);
+            }, 100);
             document.querySelector(`#cloud${key}`).style.display = "none";
 
-            if (index === array.length - 1) {
+            if (key === "good_features") {
               document.querySelector(`#cloud${key}`).style.display = "block";
             }
           }
@@ -221,28 +261,27 @@
 
   for (let i = 0; i < targetNode.length; i++) {
     let block = document.createElement("span");
+    console.log(targetNode[i]);
 
-    let image =
-      targetNode[i].parentNode.parentNode.parentNode.parentNode.parentNode
-        .parentNode.parentNode.firstElementChild.firstElementChild
-        .firstElementChild.firstElementChild.firstElementChild.firstElementChild
-        .firstElementChild.src;
+    // let image =
+    //   targetNode[i].parentNode.parentNode.parentNode.parentNode.parentNode
+    //     .parentNode.parentNode.firstElementChild.firstElementChild
+    //     .firstElementChild.firstElementChild.firstElementChild.firstElementChild
+    //     .firstElementChild.src;
 
-    let title =
-      targetNode[i].parentNode.parentNode.parentNode.parentNode.parentNode
-        .parentNode.parentNode.firstElementChild.firstElementChild
-        .firstElementChild.firstElementChild.firstElementChild.firstElementChild
-        .firstElementChild.alt;
+    // let title =
+    //   targetNode[i].parentNode.parentNode.parentNode.parentNode.parentNode
+    //     .parentNode.parentNode.firstElementChild.firstElementChild
+    //     .firstElementChild.firstElementChild.firstElementChild.firstElementChild
+    //     .firstElementChild.alt;
 
-    console.log(title);
+    // console.log(title);
 
     block.innerHTML += `
       <!-- Trigger/Open The Modal -->
 <button name=${targetNode[i]
       .querySelector("span:nth-child(2) > a")
-      .getAttribute(
-        "href"
-      )} id="myBtn${i}" title="${title}" image="${image}">Magic</button>
+      .getAttribute("href")} id="myBtn${i}">Revyou</button>
       <!-- The Modal -->
 <div id="myModal" class="modal">
 

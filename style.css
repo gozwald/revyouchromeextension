@@ -109,14 +109,14 @@
   justify-content: center;
   align-items: center;
 
-  height: 25%;
+  height: 30%;
   width: 100%;
 }
 
 .lowermodalbody {
   display: flex;
   justify-content: center;
-  height: 75%;
+  height: 70%;
   width: 100%;
 }
 
@@ -146,8 +146,42 @@
   justify-content: center;
 }
 
-.lowermodalbody span {
+.lowerleft span {
   margin: 3px;
+}
+
+.positivebutt {
+  font-size: 0.8rem;
+  border-radius: 10px;
+  padding: 13px 0px;
+  box-shadow: 1px 1px 15px 1px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+  text-align: center;
+  cursor: pointer;
+  background: linear-gradient(to right, #76b852, #8dc26f);
+  color: white;
+  transition: all 0.4s ease;
+}
+
+.positivebutt:hover {
+  background: linear-gradient(to right, #59913b, #8dc26f);
+}
+
+.negativebutt {
+  font-size: 0.8rem;
+  border-radius: 10px;
+  padding: 13px 0px;
+  box-shadow: 1px 1px 15px 1px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+  text-align: center;
+  cursor: pointer;
+  background: linear-gradient(to right, #b95a5a, #d66c6c);
+  color: white;
+  transition: all 0.4s ease;
+}
+
+.negativebutt:hover {
+  background: linear-gradient(to right, #8f4242, #d66c6c);
 }
 
 .lowerright {
@@ -167,15 +201,18 @@
 }
 
 #fullreview {
-  font-family: "Montserrat", sans-serif;
-  font-size: 20px;
+  /* font-family: "Montserrat", sans-serif; */
+  font-size: 17px;
   overflow: auto;
   display: flex;
   padding: 20px;
   justify-content: center;
-  align-items: stretch;
   width: 100%;
   height: 90%;
+}
+
+#fullreview img {
+  height: 100%;
 }
 
 #cloudcontainer {
@@ -187,8 +224,8 @@
 }
 
 .upperleft {
-  opacity: 0.9;
-  background-image: url("chrome-extension://magglmnfpahaacfieggnekiajpmlggld/images/revyou_1.png");
+  opacity: 0.7;
+  background-image: url("chrome-extension://magglmnfpahaacfieggnekiajpmlggld/images/revyou_2.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
