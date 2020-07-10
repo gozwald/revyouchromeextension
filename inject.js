@@ -23,8 +23,8 @@
   const cloudGenerator = (divName, array) => {
     // set the dimensions and margins of the graph
     var margin = { top: 0, right: 0, bottom: 0, left: 0 },
-      width = 750 - margin.left - margin.right,
-      height = 350 - margin.top - margin.bottom;
+      width = 820 - margin.left - margin.right,
+      height = 300 - margin.top - margin.bottom;
 
     // var color = d3.scale
     //   .ordinal()
@@ -54,8 +54,8 @@
       )
       .spiral("archimedean")
       .rotate(0)
-      .padding(10)
-      .fontSize(() => 17 + Math.random() * 20)
+      .padding(2)
+      .fontSize(() => 19 + Math.random() * 24)
       .on("end", draw);
 
     layout.start();
@@ -78,6 +78,7 @@
           return d.size + "px";
         })
         .style("cursor", "pointer")
+        .style("font-family", "Mouse")
         .style("fill", (d, i) => fill(i))
         .attr("text-anchor", "middle")
         .attr("transform", function (d) {
@@ -86,12 +87,12 @@
         .text(function (d) {
           return d.text;
         })
+        // .on("mouseover", handleMouseOver)
+        // .on("mouseout", handleMouseOut)
         .on("click", (d) => {
-          console.log({ d });
           const reviewContainer = document.querySelector("#fullreview");
-          console.log({ reviewContainer });
           if (reviewContainer) {
-            reviewContainer.style.fontFamily = "Montserrat, sans-serif";
+            reviewContainer.style.fontFamily = "Montserrat";
             reviewContainer.innerHTML = `"${d.review}"`;
           }
         });

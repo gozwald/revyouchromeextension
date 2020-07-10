@@ -9,7 +9,20 @@
   font-family: "Montserrat";
   font-style: normal;
   font-weight: 300;
-  src: url("chrome-extension://magglmnfpahaacfieggnekiajpmlggld/fonts/Montserrat-Lightitalic.ttf");
+  src: url("chrome-extension://magglmnfpahaacfieggnekiajpmlggld/fonts/Montserrat-Italic.ttf");
+}
+
+@font-face {
+  font-family: "Montbold";
+  font-style: normal;
+  font-weight: 600;
+  src: url("chrome-extension://magglmnfpahaacfieggnekiajpmlggld/fonts/Montserrat-SemiBold.ttf");
+}
+
+@font-face {
+  font-family: "Mouse";
+  font-style: normal;
+  src: url("chrome-extension://magglmnfpahaacfieggnekiajpmlggld/fonts/MouseMemoirs-Regular.ttf");
 }
 
 /* The Modal (background) */
