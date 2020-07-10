@@ -25,6 +25,12 @@
   src: url("chrome-extension://magglmnfpahaacfieggnekiajpmlggld/fonts/MouseMemoirs-Regular.ttf");
 }
 
+@font-face {
+  font-family: "Yan";
+  font-style: normal;
+  src: url("chrome-extension://magglmnfpahaacfieggnekiajpmlggld/fonts/YanoneKaffeesatz-Regular.ttf");
+}
+
 /* The Modal (background) */
 .modal {
   display: none; /* Hidden by default */
@@ -109,12 +115,12 @@
 
 .modal-body img {
   display: flex;
-  height: 20%;
+  height: 35%;
 }
 
 .modal-body .progress {
   display: flex;
-  width: 25%;
+  width: 35%;
 }
 
 .uppermodalbody {
@@ -238,11 +244,11 @@
 
 .upperleft {
   opacity: 0.7;
-  background-image: url("chrome-extension://magglmnfpahaacfieggnekiajpmlggld/images/revyou_2.png");
+  background-image: url("chrome-extension://magglmnfpahaacfieggnekiajpmlggld/images/revyou_new.png");
   background-repeat: no-repeat;
   background-size: cover;
   background-position: center;
-  background-size: 70% 70%;
+  background-size: 85% 85%;
   display: flex;
   justify-content: center;
   align-items: center;

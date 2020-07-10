@@ -54,7 +54,7 @@
       )
       .spiral("archimedean")
       .rotate(0)
-      .padding(2)
+      .padding(3)
       .fontSize(() => 19 + Math.random() * 24)
       .on("end", draw);
 
@@ -78,7 +78,7 @@
           return d.size + "px";
         })
         .style("cursor", "pointer")
-        .style("font-family", "Mouse")
+        .style("font-family", "Yan")
         .style("fill", (d, i) => fill(i))
         .attr("text-anchor", "middle")
         .attr("transform", function (d) {
@@ -107,7 +107,7 @@
 
     modal.style.display = "block";
     // modalBody.innerHTML += `<div id="loading"><div class="loader"></div></div>`;
-    modalBody.innerHTML += `<img src="chrome-extension://magglmnfpahaacfieggnekiajpmlggld/images/revyou_2.png">`;
+    modalBody.innerHTML += `<img src="chrome-extension://magglmnfpahaacfieggnekiajpmlggld/images/revyou_new.png">`;
     modalBody.innerHTML += `<div class="progress"><div class="indeterminate"></div></div>`;
     const loading = document.getElementById("loading");
 
